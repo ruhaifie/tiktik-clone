@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript:{
+  typescript: {
     ignoreBuildErrors: true,
   },
   reactStrictMode: true,
   images: {
+    //include url for image profile at 1st, to avoid 1st error that make it cannot start at all
     domains: [
       'lh3.googleusercontent.com',
       'cdn.pixabay.com',
