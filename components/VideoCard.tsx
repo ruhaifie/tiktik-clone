@@ -1,30 +1,44 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+//next
 import { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
+//icons
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
 import { BsPlay } from 'react-icons/bs';
 
+//types.d.ts
 import { Video } from './../types';
 
+
 interface IProps {
+  //accept post, type : video
   post: Video;
   isShowingOnHome?: boolean;
 }
 
+//videocard type : nextPage<> then list of its props
 const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes }, isShowingOnHome }) => {
+
+  //type advantage eg: if console.log(post.bla2) *which does not exist then it would show error. it only abide what inside types.d.ts
+
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  //tell ts that HTMLVideoElement have pause and play type so no error | HTMLVideoElement is from video, just hover then vscode show
+  const videoRef = useRef<HTMLVideoElement>(null);  //getelementbyId
 
   const onVideoPress = () => {
     if (playing) {
+      //add ? to not crash if not work since videoRef value is null above
       videoRef?.current?.pause();
       setPlaying(false);
     } else {
+      //if not playing
       videoRef?.current?.play();
       setPlaying(true);
     }
@@ -39,6 +53,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
   if(!isShowingOnHome) {
     return (
       <div>
+        {/* template string, that */}
         <Link href={`/detail/${_id}`}>
           <video
             loop
@@ -116,10 +131,12 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
           {isHover && (
             <div className='absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3'>
               {playing ? (
+                //if play
                 <button onClick={onVideoPress}>
                   <BsFillPauseFill className='text-black text-2xl lg:text-4xl' />
                 </button>
               ) : (
+                //if not play
                 <button onClick={onVideoPress}>
                   <BsFillPlayFill className='text-black text-2xl lg:text-4xl' />
                 </button>
@@ -142,3 +159,11 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
 };
 
 export default VideoCard;
+
+/**
+
+Use useRef if need to manage focus, text selection, trigger imperative animations or integrating third-party libraries.
+
+tips
+cant put image as a child component, need empty react fragment <> </> and then can put <image> inside
+*/

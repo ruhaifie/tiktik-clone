@@ -1,5 +1,6 @@
 module.exports = {
   content: [
+    // styles that be use in pages and components
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],

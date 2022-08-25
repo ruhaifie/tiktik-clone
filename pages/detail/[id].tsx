@@ -1,3 +1,5 @@
+//square bracket *[], in file base routing. this means its dynamic eg:that random text on url/id
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { GoVerified } from 'react-icons/go';

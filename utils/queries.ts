@@ -1,4 +1,10 @@
+//to make a call to get videos
+
+//language similiar to graphQL, can learn more in sanity doc
+//https://www.sanity.io/docs/how-queries-work GROQ
 export const allPostsQuery = () => {
+  //fetch all doc type is uqual to post aka videos and order em at create at desc
+  //then spec what want to fetch
   const query = `*[_type == "post"] | order(_createdAt desc){
     _id,
      caption,
@@ -26,6 +32,7 @@ export const allPostsQuery = () => {
     }
   }`;
 
+  //return that query
   return query;
 };
 

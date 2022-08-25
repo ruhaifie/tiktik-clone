@@ -6,14 +6,21 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import '../styles/globals.css';
 
+//AppProps:what kind of prop pass to each component
 const MyApp = ({ Component, pageProps }: AppProps) => {
+
+  //nextjs can do front & backend
+  //SSR: server side rendering, at 1st true:think as SSR
   const [isSSR, setIsSSR] = useState(true);
 
+  //define when it is not SSR
   useEffect(() => {
-    setIsSSR(false);
+    setIsSSR(false);  //set to client side
+    //run only at start, that why empty []
   }, []);  
 
-  if (isSSR) return null;
+  if (isSSR) return null; //if SSR dont want to show components
+  //we want SSR to false = client
 
   return (
     <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_API_TOKEN}`}>
@@ -33,3 +40,17 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 };
 
 export default MyApp;
+
+/**
+
+npm run dev
+
+_app.tsx: main template in next.js
+
+tailwind
+md is medium device
+mid part to 92% of screen
+mt is margin top
+
+console.cloud.google.com
+*/

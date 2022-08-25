@@ -1,7 +1,10 @@
+//videos
+
 export default {
   name: 'post',
   title: 'Post',
   type: 'document',
+  //multiple fields type
   fields: [
     {
       name: 'caption',
@@ -41,9 +44,11 @@ export default {
       name: 'comments',
       title: 'Comments',
       type: 'array',
+      //array of comments
       of: [{ type: 'comment' }],
     },
     {
+      //category
       name: 'topic',
       title: 'Topic',
       type: 'string',

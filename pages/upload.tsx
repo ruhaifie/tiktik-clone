@@ -1,23 +1,40 @@
+//react
 import React, { useEffect, useState } from 'react';
+
+//sanity | import type from sanity to define type state
 import { SanityAssetDocument } from '@sanity/client';
+
+//next. allow to re-route back to home
 import { useRouter } from 'next/router';
+
+//icons
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+
+//axios
 import axios from 'axios';
 
+//zustand
 import useAuthStore from '../store/authStore';
+
 import { BASE_URL } from '../utils';
 import { client } from '../utils/client';
+//category/topics
 import { topics } from '../utils/constants';
 
+//upload component
 const Upload = () => {
+
   const [caption, setCaption] = useState('');
-  const [topic, setTopic] = useState<String>(topics[0].name);
+  const [topic, setTopic] = useState<String>(topics[0].name); //show the 1st topic by default
   const [loading, setLoading] = useState<Boolean>(false);
   const [savingPost, setSavingPost] = useState<Boolean>(false);
+  //define the type of state | import type from sanity, or *| undefined as start with undefine
   const [videoAsset, setVideoAsset] = useState<SanityAssetDocument | undefined>();
   const [wrongFileType, setWrongFileType] = useState<Boolean>(false);
 
+  //get user info from zustand
+  //const {userProfile} : {userProfile:any} = useAuthStore() | declare its type to any, so id below define its type
   const userProfile: any = useAuthStore((state) => state.userProfile);
   const router = useRouter();
 
@@ -25,21 +42,30 @@ const Upload = () => {
     if (!userProfile) router.push('/');
   }, [userProfile, router]);
 
+  //upload video
   const uploadVideo = async (e: any) => {
+    //grab, 0 as 1st files
     const selectedFile = e.target.files[0];
+    //fileTypes is our own rule, not from any framework lib.if not state like this, means that type is from lib/framework
     const fileTypes = ['video/mp4', 'video/webm', 'video/ogg'];
 
-    // uploading asset to sanity
+    //uploading asset to sanity
+    //check tha file types
     if (fileTypes.includes(selectedFile.type)) {
+      //true video type
       setWrongFileType(false);
       setLoading(true);
 
+      //sanity | 1st param, 'file' type | 2nd param, grab selectedFile
       client.assets
         .upload('file', selectedFile, {
+          //3rd param | option object
           contentType: selectedFile.type,
           filename: selectedFile.name,
         })
+        //
         .then((data) => {
+          //need to define type of state
           setVideoAsset(data);
           setLoading(false);
         });
@@ -50,9 +76,11 @@ const Upload = () => {
   };
 
   const handlePost = async () => {
+    //if all below exist, && chained
     if (caption && videoAsset?._id && topic) {
       setSavingPost(true);
 
+      //form document to save to sanity database
       const doc = {
         _type: 'post',
         caption,
@@ -60,19 +88,24 @@ const Upload = () => {
           _type: 'file',
           asset: {
             _type: 'reference',
+            //refer to what we upload above, then merge & connect with post | 1st:upload 2nd:merge
             _ref: videoAsset?._id,
           },
         },
+        //connect with user as well the one post it
         userId: userProfile?._id,
         postedBy: {
           _type: 'postedBy',
+          //ref to userProfile get from zustand
           _ref: userProfile?._id,
         },
         topic,
       };
 
+      //then send to backend route
       await axios.post(`${BASE_URL}/api/post`, doc);
-        
+
+      //as soon as we upload, re-direct us back to home page
       router.push('/');
     }
   };
@@ -99,7 +132,9 @@ const Upload = () => {
               </p>
             ) : (
               <div>
+                {/*  */}
                 {!videoAsset ? (
+                  //no *! video available, select to upload
                   <label className='cursor-pointer'>
                     <div className='flex flex-col items-center justify-center h-full'>
                       <div className='flex flex-col justify-center items-center'>
@@ -132,8 +167,10 @@ const Upload = () => {
                   <div className=' rounded-3xl w-[300px]  p-4 flex flex-col gap-6 justify-center items-center'>
                     <video
                       className='rounded-xl h-[462px] mt-16 bg-black'
+                      //controls so can slide move around video lentgh
                       controls
                       loop
+                      //question means *? not always availbe 
                       src={videoAsset?.url}
                     />
                     <div className=' flex justify-between gap-20'>
@@ -160,9 +197,10 @@ const Upload = () => {
         <div className='flex flex-col gap-3 pb-10'>
           <label className='text-md font-medium '>Caption</label>
           <input
+            //caption
             type='text'
             value={caption}
-            onChange={(e) => setCaption(e.target.value)}
+            onChange={(e) => setCaption(e.target.value)}  //value of key press store here
             className='rounded lg:after:w-650 outline-none text-md border-2 border-gray-200 p-2'
           />
           <label className='text-md font-medium '>Choose a topic</label>
@@ -174,10 +212,11 @@ const Upload = () => {
             className='outline-none lg:w-650 border-2 border-gray-200 text-md capitalize lg:p-4 p-2 rounded cursor-pointer'
           >
             {topics.map((item) => (
+              //render different topic from utils
               <option
-                key={item.name}
+                key={item.name}   //due to looping, so react can diff em
                 className=' outline-none capitalize bg-white text-gray-700 text-md p-2 hover:bg-slate-300'
-                value={item.name}
+                value={item.name} //to grab later
               >
                 {item.name}
               </option>
@@ -185,7 +224,7 @@ const Upload = () => {
           </select>
           <div className='flex gap-6 mt-10'>
             <button
-              onClick={handleDiscard}
+              onClick={handleDiscard} //remove
               type='button'
               className='border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none'
             >
@@ -193,7 +232,7 @@ const Upload = () => {
             </button>
             <button
               disabled={videoAsset?.url ? false : true}
-              onClick={handlePost}
+              onClick={handlePost}  //post/upload
               type='button'
               className='bg-[#F51997] text-white text-md font-medium p-2 rounded w-28 lg:w-44 outline-none'
             >
@@ -207,3 +246,28 @@ const Upload = () => {
 };
 
 export default Upload;
+
+/**
+
+FORMATTING:
+
+<div>
+{ ? (
+  <p> true </p>
+) : (
+  <p> false </p>
+) }
+</div>
+
+<input
+  type='text'
+  value={caption}
+  onChange={(e) => setCaption(e.target.value)}
+  className=''
+/>
+
+<option>
+
+typescript
+cn be hussle or advantage as it reminds us its propertis within boundaries 
+*/

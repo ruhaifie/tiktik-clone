@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+
+ //next
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+
+//icons
 import { AiFillHome, AiOutlineMenu } from 'react-icons/ai';
 import { ImCancelCircle } from 'react-icons/im';
 
@@ -9,20 +13,21 @@ import SuggestedAccounts from './SuggestedAccounts';
 import Discover from './Discover';
 import Footer from './Footer';
 import useAuthStore from '../store/authStore';
+
 const Sidebar: NextPage = () => {
   const [showSidebar, setShowSidebar] = useState<Boolean>(true);
   const { pathname } = useRouter();
   const { fetchAllUsers, allUsers }: any = useAuthStore();
 
+  //store the class name inside the obj for switch between
   const activeLink = 'flex items-center gap-3 hover:bg-primary p-3 justify-center xl:justify-start cursor-pointer font-semibold text-[#F51997] rounded';
-
   const normalLink = 'flex items-center gap-3 hover:bg-primary p-3 justify-center xl:justify-start cursor-pointer font-semibold rounded';
 
   return (
     <div>
       <div
         className='block xl:hidden m-2 ml-4 mt-3 text-xl'
-        onClick={() => setShowSidebar(!showSidebar)}
+        onClick={() => setShowSidebar(!showSidebar)} //switch the state
       >
         {showSidebar ? <ImCancelCircle /> : <AiOutlineMenu />}
       </div>
@@ -54,3 +59,10 @@ const Sidebar: NextPage = () => {
 };
 
 export default Sidebar;
+
+/**
+
+xl is xtra large
+
+double click word + crtl + space
+*/
