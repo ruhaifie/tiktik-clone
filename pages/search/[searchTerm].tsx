@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
+
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { GoVerified } from 'react-icons/go';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { GoVerified } from 'react-icons/go';
+
 import axios from 'axios';
 
 import NoResults from '../../components/NoResults';
 import VideoCard from '../../components/VideoCard';
 import useAuthStore from '../../store/authStore';
 import { BASE_URL } from '../../utils';
+
+//: type
 import { IUser, Video } from '../../types';
 
+//videos *props from below | *: means equal to
 const Search = ({ videos }: { videos: Video[] }) => {
   const [isAccounts, setIsAccounts] = useState(false);
+  //grab user
   const { allUsers }: { allUsers: IUser[] } = useAuthStore();
 
   const router = useRouter();
   const { searchTerm }: any = router.query;
 
+  //relationship: state, const, style | css class
   const accounts = isAccounts ? 'border-b-2 border-black' : 'text-gray-400';
   const isVideos = !isAccounts ? 'border-b-2 border-black' : 'text-gray-400';
   const searchedAccounts = allUsers?.filter((user: IUser) => user.userName.toLowerCase().includes(searchTerm));
@@ -78,11 +86,19 @@ export const getServerSideProps = async ({
 }: {
   params: { searchTerm: string };
 }) => {
+  //api > search > [searchTerm].tsx | pages > search > [searchTerm].tsx
+  //[searchTerm] is what we want to find. eg: localhost:3000/search/coding *that coding part
   const res = await axios.get(`${BASE_URL}/api/search/${searchTerm}`);
 
+  //[searchTerm].ts is change to [id].ts
+
+  //get videos from searchTerm.ts | res.status(200).json(videos);
   return {
     props: { videos: res.data },
   };
 };
 
 export default Search;
+
+//template content like [userId].tsx because we want to switch search user *userId or search term
+//pages > profile > [userId].tsx

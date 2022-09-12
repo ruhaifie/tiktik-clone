@@ -5,9 +5,9 @@ import { client } from '../../../utils/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { id } = req.query;
+    const { searchTerm } = req.query; //const searchTerm is equivalent to [*same].ts name for this file
 
-    const videosQuery = searchPostsQuery(id);
+    const videosQuery = searchPostsQuery(searchTerm); //searchPostsQuery inside queries.ts
 
     const videos = await client.fetch(videosQuery);
 
@@ -15,5 +15,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-//thispage: pages > api > search > [id].ts
+//thispage: pages > api > search > [searchTerm].ts
 //2:08:54

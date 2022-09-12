@@ -10,8 +10,8 @@ import { BASE_URL } from '../utils';
 
 //typescipt type : any, means can be everything
 const authStore = (set: any) => ({
-  //null at start
-  userProfile: null,
+  //add to zustand store list
+  userProfile: null,  //null at start
   allUsers: [],
   
   //function
@@ -20,7 +20,7 @@ const authStore = (set: any) => ({
   //logout, use at navbar.tsx
   removeUser: () => set({ userProfile: null }),
 
-  //function
+  //create new endpoint to fetch all users
   fetchAllUsers: async () => {
     //axios reponse
     const response = await axios.get(`${BASE_URL}/api/users`);

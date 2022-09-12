@@ -23,6 +23,7 @@ import Logo from '../utils/tiktik-logo.png';
 
 const Navbar = () => {
   const [user, setUser] = useState<IUser | null>();
+  //searchbar
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
 
@@ -33,11 +34,13 @@ const Navbar = () => {
     setUser(userProfile);
   }, [userProfile]);
 
+  //type for function that contain prev def, : { preventDefault: () => void }
   const handleSearch = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (searchValue) {
-      router.push(`/search/${searchValue}`);
+      //pages > search > [searchTerm].tsx
+      router.push(`/search/${searchValue}`);  //eg: localhost:3000/search/coding
     }
   };
 
@@ -60,7 +63,9 @@ const Navbar = () => {
           className='absolute md:static top-10 -left-20 bg-white'
         >
           <input
-            value={searchValue}
+            //search
+            //type="text"
+            value={searchValue} //value is store inside state
             onChange={(e) => setSearchValue(e.target.value)}
             className='bg-primary p-3 md:text-md font-medium border-2 border-gray-100 focus:outline-none focus:border-2 focus:border-gray-300 w-[300px] md:w-[350px] rounded-full  md:top-0'
             placeholder='Search accounts and videos'

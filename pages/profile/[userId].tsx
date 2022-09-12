@@ -16,20 +16,24 @@ interface IProps {
   };
 }
 
+//
 const Profile = ({ data }: IProps) => {
   const [showUserVideos, setShowUserVideos] = useState<Boolean>(true);
   const [videosList, setVideosList] = useState<Video[]>([]);
 
-  const { user, userVideos, userLikedVideos } = data;
+  const { user, userVideos, userLikedVideos } = data; //destructure, coming from data | query from [id].ts
+  
+  //relationship: state, const, style | css class
   const videos = showUserVideos ? 'border-b-2 border-black' : 'text-gray-400';
   const liked = !showUserVideos ? 'border-b-2 border-black' : 'text-gray-400';
 
+  //switch to show video or like segment at start
   useEffect(() => {
     const fetchVideos = async () => {
       if (showUserVideos) {
         setVideosList(userVideos);
       } else {
-        setVideosList(userLikedVideos);
+        setVideosList(userLikedVideos); //use interface Iprops that fetch data from backend
       }
     };
 
@@ -60,6 +64,7 @@ const Profile = ({ data }: IProps) => {
       </div>
       <div>
         <div className='flex gap-10 mb-10 mt-10 border-b-2 border-gray-200 bg-white w-full'>
+          {/* switch to show video or like segment */}
           <p className={`text-xl font-semibold cursor-pointer ${videos} mt-2`} onClick={() => setShowUserVideos(true)}>
             Videos
           </p>
@@ -68,13 +73,15 @@ const Profile = ({ data }: IProps) => {
           </p>
         </div>
         <div className='flex gap-6 flex-wrap md:justify-start'>
+          {/* video list | nested { ? () : () } */}
           {videosList.length > 0 ? (
+            //post & idx
             videosList.map((post: Video, idx: number) => (
-              <VideoCard key={idx} post={post} />
+              <VideoCard key={idx} post={post} /> //post props
             ))
           ) : (
             <NoResults
-              text={`No ${showUserVideos ? '' : 'Liked'} Videos Yet`}
+              text={`No ${showUserVideos ? '' : 'Liked'} Videos Yet`} //text props
             />
           )}
         </div>
@@ -83,15 +90,24 @@ const Profile = ({ data }: IProps) => {
   );
 };
 
+//
 export const getServerSideProps = async ({
   params: { userId },
 }: {
   params: { userId: string };
 }) => {
+  //grab *GET id: pages > api > profile > [id].ts , remember the next: file based routing
   const res = await axios.get(`${BASE_URL}/api/profile/${userId}`);
 
+  //return data fetch from profile > [id].ts
   return {
     props: { data: res.data },
   };
 };
 export default Profile;
+
+/**
+[id].tsx is change to [userId].tsx
+
+pages > profile > [userId].tsx
+*/

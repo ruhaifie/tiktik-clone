@@ -21,6 +21,7 @@ interface IProps {
   isShowingOnHome?: boolean;
 }
 
+//post props receives from: pages > profile > [userId].tsx
 //videocard type : nextPage<> then list of its props
 const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes }, isShowingOnHome }) => {
 
@@ -81,6 +82,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
       <div>
         <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded '>
           <div className='md:w-16 md:h-16 w-10 h-10'>
+            {/* file based routing */}
             <Link href={`/profile/${postedBy?._id}`}>
               <>
                 <Image

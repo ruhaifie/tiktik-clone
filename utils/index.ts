@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+//env
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 //adduser from authStore.ts *zustand. receive/accept prop from navbar.tsx
